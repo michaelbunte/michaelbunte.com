@@ -1,12 +1,15 @@
 var clearing;
 var funcs;
+var pointSeed;
+var dontPrint;
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(0);
   angleMode(DEGREES);
   clearing = 0;
-  funcs = [];
+  //funcs = [6, 1, 9, 6];
   setFuncs(); 
+  dontPrint = false;
 }
 
 function getAngle(x1, y1, x2, y2) {
@@ -160,56 +163,59 @@ function pushOut(randPos) {
 
 function setFuncs() {
   funcs = [];
-  funcs.push(int(random(2)));
-  funcs.push(int(random(7)));
-  funcs.push(int(random(10)));
-  funcs.push(int(random(6)));
-  funcs.push(int(random(3)));
-  funcs.push(int(random(3)));
-  funcs.push(int(random(5)));
+  let numFuncs = int(abs(randomGaussian(5,3)) + 1);
+  for(let i = 0; i < numFuncs/2; i++) {
+    funcs.push(int(random(8)));
+  }
+  for(let i = 0; i < numFuncs; i++) {
+    funcs.push(int(random(8,14)));
+  }
+  if(random(-10,4) < 0) {
+    funcs.push(13);
+  }
+  pointSeed = createVector(random(-1000,1000), random(-1000,1000));
+  console.log(funcs);
+}
+
+function runFuncNum( num, randPos ) {
+  if(num == 0) {
+    tiles(randPos);
+  } else if (num == 1) {
+    circles(randPos);
+  } else if (num == 2) {
+    swiggles(randPos);
+  } else if (num == 3) {
+    swiggles2(randPos);
+  } else if (num == 4) {
+    wiggle(randPos);
+  } else if (num == 5) {
+    tube(randPos);
+  } else if (num == 5) {
+    star(randPos);
+  } else if (num == 6) {
+    circl(randPos);
+  } else if (num == 7) {
+    circl2(randPos);
+  } else if (num == 8) {
+    funPos(randPos);
+  } else if (num == 9) {
+    sundial(randPos, createVector(pointSeed.x,pointSeed.y));
+  } else if (num == 10) {
+    burst(randPos);
+  } else if (num == 11) {
+    burst(randPos);
+    pushOut(randPos);
+  } else if (num == 12) {
+    //pushOut(randPos);
+  } else if (num == 13) {
+    flip(randPos);
+  }
 }
 
 function runFuncs(randPos) {
-  if(funcs[0] < 1) {
-    tiles(randPos);
+  for(let i = 0; i < funcs.length; i++) {
+    runFuncNum(funcs[i], randPos);
   }
-
-  if(funcs[1] < 3 ) {
-    circles(randPos);
-  } else if (funcs[1] < 4) {
-    swiggles(randPos);
-  } else if (funcs[1] < 5) {
-    swiggles2(randPos);
-  }
-
-  if(funcs[2] == 0) {
-    star(randPos);
-  } else if (funcs[2] == 1) {
-    tubes(randPos);
-  } else if (funcs[2] == 2 ) {
-    curtain(randPos);
-  }
-
-  if(funcs[3] == 0) {
-    wiggle(randPos);
-  }
-
-  if(funcs[4] == 0) {
-    swoop(randPos);
-  }
-
-  if(funcs[5] == 0) {
-    sundial(randPos, createVector(-200,-200));
-  }
-
-  if(funcs[6] == 0) {
-    funPos(randPos);
-  }
-
-}
-
-function runFuncNum( num ) {
-
 }
 
 function burst(randPos) {
@@ -258,74 +264,20 @@ function draw() {
   if(keyIsDown(32)) {
     clearing = 1;
   }
+
+  if(keyIsDown(80) && dontPrint == false) {
+    saveCanvas( "myAbyss", "png");
+    dontPrint = true;
+  } else if( ! keyIsDown(80)) {
+    dontPrint = false;
+  }
   
   if(clearing < 0) {
     for(let i = 0; i < 300; i++) {
       let myPoint = createVector( width / 2, height / 2 );
       let sd = 50;
       let randPos = createVector(randomGaussian(0, sd), randomGaussian(0, sd));
-      // // tiles(randPos);
-      // //curtain(randPos);
-      // //swiggles2(randPos);
-      // //swiggles(randPos);
-      // //circles(randPos);
-      // //star(randPos);
-      // //funPos(randPos);
-      // //swiggles(randPos);
-      // //wiggle(randPos);
-      // //swoop(randPos);
-      // //tube(randPos);
-      // //sundial(randPos, createVector(-200,-200));
-      // //burst(randPos);
-      // //circl(randPos);
-      // //flip(randPos);
-      // // circl(randPos);
-      // swiggles2(randPos);
-      // //swiggles2(randPos);
-      // //tiles(randPos);
-      // //circles(randPos);
-      // swoop(randPos);
-      // sundial(randPos, createVector(-500,-500));
-      // flip(randPos);
-      // burst(randPos);
-      // pushOut(randPos);
-      // pushOut(randPos);
-      // tiles(randPos);
-      // circles(randPos);
-      //tiles(randPos);
-      // tiles(randPos);
-      // sundial(randPos, createVector(-1000,-1000));
-      // tube(randPos);
-      // flip(randPos);
-      // tube(randPos);
-      // tube(randPos);
-      // pushOut(randPos);
-      // circles(randPos);
-      // sundial(randPos, createVector(-500,-500));
-      // tiles(randPos);
-      // swoop(randPos);
-      // sundial(randPos, createVector(-500,-500));
-      // burst(randPos);
-      // pushOut(randPos);
-      //swiggles(randPos);
-      //circles(randPos);
-      // funPos(randPos);
-      // tiles(randPos);
-      // burst(randPos);
-      // pushOut(randPos);
-      // tiles(randPos);
-      //circles(randPos);
-      tiles(randPos);
-      wiggle(randPos);
-      flip(randPos);
-      wiggle(randPos);
-      burst(randPos);
-      pushOut(randPos);
-      flip(randPos);
-      
-
-
-      //if(dist(randPos.x, randPos.y, 0,0) < 200)
+      runFuncs(randPos);
       point(randPos.x + myPoint.x, randPos.y + myPoint.y);
     }
   } else {
