@@ -1,9 +1,12 @@
 var clearing;
+var funcs;
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(0);
   angleMode(DEGREES);
   clearing = 0;
+  funcs = [];
+  setFuncs(); 
 }
 
 function getAngle(x1, y1, x2, y2) {
@@ -111,6 +114,21 @@ function circles(randPos) {
   randPos.y *= 10 * distToCenter / oldDistToCenter;
 }
 
+function lines(randPos) {
+  randPos.y = int(randPos.y/10) * 10;
+  randPos.mult(2);
+}
+function hatch(randPos) {
+  var i = int(random(2));
+  if(i == 0) {
+    randPos.y = int(randPos.y/10) * 10;
+    randPos.mult(2);
+  } else {
+    randPos.x = int(randPos.x/10) * 10;
+    randPos.mult(2);
+  }
+}
+
 function swiggles2(randPos) {
   randPos.y = sin(10 * randPos.x) * 10 + int(randPos.y/20) * 20;
   randPos.x = cos(randPos.y * 10) * 10 + randPos.x;
@@ -129,6 +147,69 @@ function curtain(randPos) {
   randPos.y+=50;
   randPos.mult(2);
   angleMode(DEGREES);
+}
+
+function pushOut(randPos) {
+  let dis = dist(randPos.x, randPos.y, 0, 0);
+  let multiplier = 1 / ((dis/2 + 10)/100) + .5;
+  if(multiplier < 1) {
+    //multiplier = 1;
+  }
+  randPos.mult(multiplier);
+}
+
+function setFuncs() {
+  funcs = [];
+  funcs.push(int(random(2)));
+  funcs.push(int(random(7)));
+  funcs.push(int(random(10)));
+  funcs.push(int(random(6)));
+  funcs.push(int(random(3)));
+  funcs.push(int(random(3)));
+  funcs.push(int(random(5)));
+}
+
+function runFuncs(randPos) {
+  if(funcs[0] < 1) {
+    tiles(randPos);
+  }
+
+  if(funcs[1] < 3 ) {
+    circles(randPos);
+  } else if (funcs[1] < 4) {
+    swiggles(randPos);
+  } else if (funcs[1] < 5) {
+    swiggles2(randPos);
+  }
+
+  if(funcs[2] == 0) {
+    star(randPos);
+  } else if (funcs[2] == 1) {
+    tubes(randPos);
+  } else if (funcs[2] == 2 ) {
+    curtain(randPos);
+  }
+
+  if(funcs[3] == 0) {
+    wiggle(randPos);
+  }
+
+  if(funcs[4] == 0) {
+    swoop(randPos);
+  }
+
+  if(funcs[5] == 0) {
+    sundial(randPos, createVector(-200,-200));
+  }
+
+  if(funcs[6] == 0) {
+    funPos(randPos);
+  }
+
+}
+
+function runFuncNum( num ) {
+
 }
 
 function burst(randPos) {
@@ -158,6 +239,12 @@ function circl(randPos) {
   randPos.mult(dis * 2);
 }
 
+function circl2(randPos) {
+  let dis = dist(randPos.x, randPos.y, 0, 0);
+  let multiplier = 1 / ((dis/2 + 10)/100);
+  randPos.mult(multiplier);
+}
+
 function flip(randPos) {
   let xPos = randPos.x;
   randPos.x = randPos.y;
@@ -169,7 +256,7 @@ function draw() {
   strokeWeight(1);
   clearing--;
   if(keyIsDown(32)) {
-    clearing = 1000;
+    clearing = 1;
   }
   
   if(clearing < 0) {
@@ -177,33 +264,72 @@ function draw() {
       let myPoint = createVector( width / 2, height / 2 );
       let sd = 50;
       let randPos = createVector(randomGaussian(0, sd), randomGaussian(0, sd));
-      tiles(randPos);
-      //curtain(randPos);
-      //swiggles2(randPos);
+      // // tiles(randPos);
+      // //curtain(randPos);
+      // //swiggles2(randPos);
+      // //swiggles(randPos);
+      // //circles(randPos);
+      // //star(randPos);
+      // //funPos(randPos);
+      // //swiggles(randPos);
+      // //wiggle(randPos);
+      // //swoop(randPos);
+      // //tube(randPos);
+      // //sundial(randPos, createVector(-200,-200));
+      // //burst(randPos);
+      // //circl(randPos);
+      // //flip(randPos);
+      // // circl(randPos);
+      // swiggles2(randPos);
+      // //swiggles2(randPos);
+      // //tiles(randPos);
+      // //circles(randPos);
+      // swoop(randPos);
+      // sundial(randPos, createVector(-500,-500));
+      // flip(randPos);
+      // burst(randPos);
+      // pushOut(randPos);
+      // pushOut(randPos);
+      // tiles(randPos);
+      // circles(randPos);
+      //tiles(randPos);
+      // tiles(randPos);
+      // sundial(randPos, createVector(-1000,-1000));
+      // tube(randPos);
+      // flip(randPos);
+      // tube(randPos);
+      // tube(randPos);
+      // pushOut(randPos);
+      // circles(randPos);
+      // sundial(randPos, createVector(-500,-500));
+      // tiles(randPos);
+      // swoop(randPos);
+      // sundial(randPos, createVector(-500,-500));
+      // burst(randPos);
+      // pushOut(randPos);
       //swiggles(randPos);
       //circles(randPos);
-      //star(randPos);
-      //funPos(randPos);
-      //swiggles(randPos);
-      //wiggle(randPos);
-      swoop(randPos);
-      //tube(randPos);
-      sundial(randPos, createVector(-200,-200));
+      // funPos(randPos);
+      // tiles(randPos);
+      // burst(randPos);
+      // pushOut(randPos);
+      // tiles(randPos);
+      //circles(randPos);
+      tiles(randPos);
+      wiggle(randPos);
+      flip(randPos);
+      wiggle(randPos);
       burst(randPos);
-      //circl(randPos);
-      //flip(randPos);
+      pushOut(randPos);
+      flip(randPos);
       
 
-      
+
       //if(dist(randPos.x, randPos.y, 0,0) < 200)
       point(randPos.x + myPoint.x, randPos.y + myPoint.y);
     }
   } else {
-    for(var i = 0; i < 500; i++) {
-      strokeWeight(3);
-      stroke(0);
-      point(random(width), random(height));
-    }
+    background(0);
   }
   //console.log(getAngle(mouseX, mouseY, 400, 400));
 }
